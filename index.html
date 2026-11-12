@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Salsa 💗</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="hearts" aria-hidden="true"></div>
+
+  <main class="card">
+    <div class="eyebrow">A LITTLE WEBSITE MADE WITH LOVE</div>
+    <div class="photo-frame">
+      <img src="{{ url_for('static', filename='images/salsa.jpg') }}" alt="Foto Salsa">
+      <span class="photo-heart">♥</span>
+    </div>
+
+    <p class="hello">Untuk seseorang yang spesial</p>
+    <h1>Hai, Salsa! <span>♡</span></h1>
+    <p class="intro">Ada pesan kecil yang aku siapkan khusus buat kamu.</p>
+
+    <div class="music-box">
+      <div class="music-icon">♫</div>
+      <div class="music-info">
+        <strong>Perfect</strong>
+        <small>Ed Sheeran</small>
+      </div>
+      <button id="musicButton" class="music-button" type="button">▶ Putar musik</button>
+    </div>
+    <p class="music-note">Musik diputar melalui YouTube. Tekan tombol untuk memulai.</p>
+    <div id="youtubePlayer" class="youtube-wrap" aria-label="Pemutar musik">
+      <iframe
+        id="youtubeFrame"
+        title="Perfect - Ed Sheeran"
+        src="https://www.youtube-nocookie.com/embed/2Vv-BfVoq4g?enablejsapi=1&playsinline=1"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <button id="letterButton" class="main-button" type="button">Buka surat kecil 💌</button>
+
+    <section id="letter" class="letter" hidden>
+      <div class="letter-top">💗 A LETTER FOR YOU 💗</div>
+      <h2>Dear Salsa,</h2>
+      <p>
+        Terima kasih sudah hadir dan memberi warna di hari-hariku.
+        Aku mungkin belum menjadi orang yang sempurna, tetapi aku ingin
+        terus belajar menjadi seseorang yang bisa membuatmu merasa
+        dihargai, disayangi, dan bahagia.
+      </p>
+      <p>
+        Semoga kita selalu punya alasan untuk tersenyum, saling mengerti,
+        dan melewati hari-hari bersama. Jangan lupa bahagia, ya.
+      </p>
+      <p class="signature">With love, seseorang yang sayang kamu ♡</p>
+    </section>
+
+    <button id="surpriseButton" class="text-button" type="button">Satu kejutan lagi ✨</button>
+    <p id="surprise" class="surprise" hidden>Kalau bisa memilih lagi, aku tetap ingin mengenal kamu, Salsa. ❤️</p>
+    <footer>Made with love, just for Salsa ♡</footer>
+  </main>
+
+  <script>
+    const letterButton = document.getElementById("letterButton");
+    const letter = document.getElementById("letter");
+    const surpriseButton = document.getElementById("surpriseButton");
+    const surprise = document.getElementById("surprise");
+    const musicButton = document.getElementById("musicButton");
+    const youtubeFrame = document.getElementById("youtubeFrame");
+
+    letterButton.addEventListener("click", () => {
+      letter.hidden = !letter.hidden;
+      letterButton.textContent = letter.hidden ? "Buka surat kecil 💌" : "Tutup surat 💗";
+    });
+
+    surpriseButton.addEventListener("click", () => {
+      surprise.hidden = !surprise.hidden;
+      surpriseButton.textContent = surprise.hidden ? "Satu kejutan lagi ✨" : "Simpan kejutan 💕";
+    });
+
+    // Browser biasanya memblokir autoplay. Musik dimulai setelah tombol ditekan.
+    let playing = false;
+    musicButton.addEventListener("click", () => {
+      if (!playing) {
+        youtubeFrame.contentWindow.postMessage(
+          JSON.stringify({ event: "command", func: "playVideo", args: [] }), "*"
+        );
+        musicButton.textContent = "♫ Musik dimulai";
+        playing = true;
+      } else {
+        youtubeFrame.contentWindow.postMessage(
+          JSON.stringify({ event: "command", func: "pauseVideo", args: [] }), "*"
+        );
+        musicButton.textContent = "▶ Putar musik";
+        playing = false;
+      }
+    });
+
+    // Hati dekoratif yang jatuh perlahan.
+    const hearts = document.querySelector(".hearts");
+    const symbols = ["♥", "♡", "💗"];
+    for (let i = 0; i < 22; i++) {
+      const heart = document.createElement("span");
+      heart.className = "falling-heart";
+      heart.textContent = symbols[i % symbols.length];
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (7 + Math.random() * 9) + "s";
+      heart.style.animationDelay = (Math.random() * 12) + "s";
+      heart.style.fontSize = (12 + Math.random() * 18) + "px";
+      hearts.appendChild(heart);
+    }
+  </script>
+</body>
+</html>
